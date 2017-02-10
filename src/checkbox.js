@@ -12,7 +12,6 @@ mofron.comp.Checkbox = class extends mofron.Component {
     constructor (prm,opt) {
         try {
             super(prm);
-            this.setBaseName('Checkbox');
             this.name('Checkbox');
             
             this.def_chk = false;

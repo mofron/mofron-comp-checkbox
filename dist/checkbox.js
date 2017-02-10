@@ -75,7 +75,6 @@ require("mofron-event-click");
 	        try {
 	            var _this = _possibleConstructorReturn(this, (_class.__proto__ || Object.getPrototypeOf(_class)).call(this, prm));
 
-	            _this.setBaseName('Checkbox');
 	            _this.name('Checkbox');
 
 	            _this.def_chk = false;
