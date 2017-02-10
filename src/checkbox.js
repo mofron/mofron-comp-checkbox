@@ -34,10 +34,10 @@ mofron.comp.Checkbox = class extends mofron.Component {
     initDomConts (prm) {
         try {
             if (null !== prm) {
-                if ('boolean' !== (typeof chk)) {
+                if ('boolean' !== (typeof prm)) {
                     throw new Error('invalid parameter');
                 }
-                this.def_sel = prm;
+                this.def_chk = prm;
             }
             var chk = new mofron.util.Vdom('input',this);
             chk.attr('type','checkbox');
