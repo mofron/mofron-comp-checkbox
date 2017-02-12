@@ -2,10 +2,11 @@
  * @file checkbox.js
  * @author simpart
  */
+require("mofron-event-click");
 
 /**
- * @class mofron.comp.Checkbox
- * @brief Accordion Component class
+ * @class comp.Checkbox
+ * @brief checkbox component class
  */
 mofron.comp.Checkbox = class extends mofron.Component {
     
@@ -39,7 +40,7 @@ mofron.comp.Checkbox = class extends mofron.Component {
                 }
                 this.def_chk = prm;
             }
-            var chk = new mofron.util.Vdom('input',this);
+            var chk = new mofron.util.Dom('input',this);
             chk.attr('type','checkbox');
             this.vdom().addChild(chk);
             this.target(this.vdom());
@@ -101,7 +102,7 @@ mofron.comp.Checkbox = class extends mofron.Component {
     check (chk) {
         try {
             if (undefined === chk) {
-                return this.vdom().getChild(0).getDom().checked;
+                return this.vdom().getChild(0).getRawDom().checked;
             }
             if ('boolean' !== (typeof chk)) {
                 throw new Error('invalid parameter');
@@ -111,7 +112,7 @@ mofron.comp.Checkbox = class extends mofron.Component {
                 this.def_chk = chk;
                 return;
             }
-            this.vdom().getChild(0).getDom().checked = chk;
+            this.vdom().getChild(0).getRawDom().checked = chk;
         } catch (e) {
             console.error(e.stack);
             throw e;

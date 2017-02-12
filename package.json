@@ -1,8 +1,8 @@
 {
   "name": "mofron-comp-checkbox",
-  "version": "0.0.3",
-  "description": "Checkbox Component for mofron",
-  "main": "dist/checkbox.js",
+  "version": "0.0.4",
+  "description": "checkbox component for mofron",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,10 +19,9 @@
     "url": "https://github.com/simpart/mofron-comp-checkbox/issues"
   },
   "homepage": "https://github.com/simpart/mofron-comp-checkbox#readme",
+  "dependencies" : {
+      "mofron-event-click" : ""
+  },
   "devDependencies": {
-    "babel-core": "^6.21.0",
-    "babel-loader": "^6.2.10",
-    "babel-preset-es2015": "^6.18.0",
-    "webpack": "^1.14.0"
   }
 }
