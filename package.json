@@ -20,7 +20,7 @@
   },
   "homepage": "https://github.com/simpart/mofron-comp-checkbox#readme",
   "dependencies" : {
-      "mofron-event-click" : ""
+      "mofron-event-common" : ""
   },
   "devDependencies": {
   }
