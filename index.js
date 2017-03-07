@@ -59,8 +59,6 @@ mofron.comp.Checkbox = class extends mofron.comp.Form {
            elem.addEvent(onChange);
            
            super.addChild(elem, disp);
-           //this.check(this.child().length-1, false);
-           this.m_check.push(false);
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -121,16 +119,7 @@ mofron.comp.Checkbox = class extends mofron.comp.Form {
             if (undefined === chk) {
                 /* getter */
                 if (undefined === idx) {
-                    if (true === this.isRendered()) {
-                        var ret_val = new Array();
-                        var child = this.child();
-                        for (var idx in child) {
-                            ret_val.push(child[idx].target().getRawDom().checked);
-                        }
-                        return ret_val;
-                    } else {
-                        return this.m_check;
-                    }
+                    return this.m_check;
                 } else {
                     if ('number' !== typeof idx) {
                         throw new Error('invalid parameter');
