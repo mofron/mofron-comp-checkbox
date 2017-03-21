@@ -13,17 +13,17 @@ require("mofron-layout-horizon");
  */
 mofron.comp.Checkbox = class extends mofron.comp.Form {
     
-    constructor (prm_opt) {
-        try {
-            super();
-            this.name('Checkbox');
-            this.m_chgevt = null;
-            this.prmOpt(prm_opt);
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
+//    constructor (prm_opt) {
+//        try {
+//            super();
+//            this.name('Checkbox');
+//            this.m_chgevt = null;
+//            this.prmOpt(prm_opt);
+//        } catch (e) {
+//            console.error(e.stack);
+//            throw e;
+//        }
+//    }
     
     addChild (chd, disp) {
         try {
@@ -41,7 +41,10 @@ mofron.comp.Checkbox = class extends mofron.comp.Form {
                                      try {
                                          var chg_evt = obj[0].changeEvent();
                                          if (null !== chg_evt) {
-                                             chg_evt(obj[1].index(), obj[0]);
+                                             chg_evt(
+                                                 obj[1].index(),
+                                                 obj[0].check(obj[1].index())
+                                             );
                                          }
                                      } catch (e) {
                                          console.error(e.stack);
@@ -101,50 +104,52 @@ mofron.comp.Checkbox = class extends mofron.comp.Form {
     changeEvent (fnc) {
         try {
             if (undefined === fnc) {
-                return this.chg_evt;
+                /* getter */
+                return (undefined === this.m_chgevt) ? null : this.m_chgevt;
             }
-            if (null === fnc) {
+            if ('function' !== typeof fnc) {
                 throw new Error('invalid parameter');
             }
-            this.chg_evt = fnc;
+            this.m_chgevt = fnc;
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
-    check (idx, chk) {
+    check (idx, flg) {
         try {
-//            if (undefined === chk) {
-//                /* getter */
-//                if (undefined === idx) {
-//                    return this.m_check;
-//                } else {
-//                    if ('number' !== typeof idx) {
-//                        throw new Error('invalid parameter');
-//                    }
-//                    if (true === this.isRendered()) {
-//                        return this.child()[idx].target().getRawDom().checked;
-//                    } else {
-//                        return this.m_check[idx];
-//                    }
-//                }
-//            }
-//            /* setter */
-//            if ('boolean' !== (typeof chk)) {
-//                throw new Error('invalid parameter');
-//            }
-//            if ('number' !== typeof idx) {
-//                throw new Error('invalid parameter');
-//            }
-//            if (this.m_check.length !== idx) {
-//                this.m_check.push(false);
-//            }
-//            this.m_check[idx] = chk;
-//            if (false === this.isRendered()) {
-//                return;
-//            }
-//            this.child()[idx].target().getRawDom().checked = chk;
+            var chd     = this.child();
+            if (undefined === flg) {
+                /* getter */
+                if (undefined === idx) {
+                    var ret_val = new Array();
+                    for (var elm_idx in chd) {
+                        ret_val.push(chd[elm_idx].check());
+                    }
+                    return ret_val;
+                } else {
+                    for (var elm_idx in chd) {
+                        if (idx === chd[elm_idx].index()) {
+                            return chd[elm_idx].check();
+                        }
+                    }
+                    return null;
+                }
+            }
+            /* setter */
+            if ( ('boolean' !== typeof flg) ||
+                 ('number'  !== typeof idx) ) {
+                throw new Error('invalid parameter');
+            }
+            for (var elm_idx in chd) {
+                if (idx === chd[elm_idx].index()) {
+                    chd[elm_idx].check(flg);
+                    return;
+                }
+            }
+            
+            throw new Error('invalid parameter');
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -159,23 +164,14 @@ mofron.comp.Checkbox = class extends mofron.comp.Form {
             throw e;
         }
     }
+    
+    
 }
 mofron.comp.checkbox = {};
 module.exports = mofron.comp.Checkbox;
 
 
 mofron.comp.Checkbox_element = class extends mofron.Component {
-    constructor (prm_opt) {
-        try {
-            super();
-            this.m_index = null;
-            this.prmOpt(prm_opt);
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
     initDomConts (prm) {
         try {
             this.name('Checkbox_element');
@@ -198,13 +194,31 @@ mofron.comp.Checkbox_element = class extends mofron.Component {
         try {
             if (undefined === idx) {
                 /* getter */
-                return this.m_index;
+                return (undefined === this.m_index) ? null : this.m_index;
             }
             /* setter */
             if ('number' !== typeof idx) {
                 throw new Error('invalid parameter');
             }
             this.m_index = idx;
+        } catch (e) {
+            console.error(e.stack);
+            throw e;
+        }
+    }
+    
+    check (flg) {
+        try {
+            if (undefined === flg) {
+                /* getter */
+                var ret_chk = this.vdom().child()[0].prop('checked');
+                return (null === ret_chk) ? false : ret_chk;
+            }
+            /* setter */
+            if ('boolean' === typeof flg) {
+                throw new Error('invalid parameter');
+            }
+            this.vdom().child()[0].prop('checked', flg);
         } catch (e) {
             console.error(e.stack);
             throw e;
