@@ -5,6 +5,7 @@
 require("mofron-comp-form");
 require("mofron-comp-text");
 require("mofron-event-common");
+require("mofron-event-click");
 require("mofron-layout-horizon");
 
 /**
@@ -13,27 +14,17 @@ require("mofron-layout-horizon");
  */
 mofron.comp.Checkbox = class extends mofron.comp.Form {
     
-//    constructor (prm_opt) {
-//        try {
-//            super();
-//            this.name('Checkbox');
-//            this.m_chgevt = null;
-//            this.prmOpt(prm_opt);
-//        } catch (e) {
-//            console.error(e.stack);
-//            throw e;
-//        }
-//    }
-    
     addChild (chd, disp) {
         try {
            chd.style({'float' : 'none'});
-           
-           var elem = new mofron.comp.Checkbox_element({
+           var Elem = this.getCheckElem();
+           var elem = new Elem({
                           param    : this,
                           index    : this.child().length,
                           addChild : new mofron.Param(chd, disp)
                       });
+           
+           /* set checked event */
            elem.addEvent(
                new mofron.event.Common({
                    handler : new mofron.Param(
@@ -56,6 +47,21 @@ mofron.comp.Checkbox = class extends mofron.comp.Form {
                    eventName : 'onchange'
                })
            );
+           
+           /* set contents click event */
+           chd.addEvent(
+               new mofron.event.Click(
+                   function () {
+                       try {
+                           alert("click");
+                       } catch (e) {
+                           console.error(e.stack);
+                           throw e;
+                       }
+                   }
+               )
+           );
+           
            super.addChild(elem, disp);
         } catch (e) {
             console.error(e.stack);
@@ -119,29 +125,16 @@ mofron.comp.Checkbox = class extends mofron.comp.Form {
     
     check (idx, flg) {
         try {
-            var chd     = this.child();
             if (undefined === flg) {
                 /* getter */
-                if (undefined === idx) {
-                    var ret_val = new Array();
-                    for (var elm_idx in chd) {
-                        ret_val.push(chd[elm_idx].check());
-                    }
-                    return ret_val;
-                } else {
-                    for (var elm_idx in chd) {
-                        if (idx === chd[elm_idx].index()) {
-                            return chd[elm_idx].check();
-                        }
-                    }
-                    return null;
-                }
+                return this.value(idx);
             }
             /* setter */
             if ( ('boolean' !== typeof flg) ||
                  ('number'  !== typeof idx) ) {
                 throw new Error('invalid parameter');
             }
+            var chd = this.child();
             for (var elm_idx in chd) {
                 if (idx === chd[elm_idx].index()) {
                     chd[elm_idx].check(flg);
@@ -156,72 +149,93 @@ mofron.comp.Checkbox = class extends mofron.comp.Form {
         }
     }
     
-    value () {
+    value (idx) {
         try {
-            
+            var chd = this.child();
+            var ret_val = null;
+            if (undefined === idx) {
+                ret_val = new Array();
+                var checked = false;
+                for (var elm_idx in chd) {
+                    ret_val.push(chd[elm_idx].check());
+                    if (true === chd[elm_idx].check()) {
+                        checked = true;
+                    }
+                }
+                if ( (true === this.require()) && (false === checked) ) {
+                    ret_val = null;
+                }
+            } else {
+                for (var elm_idx in chd) {
+                    if (idx === chd[elm_idx].index()) {
+                        ret_val = chd[elm_idx].check();
+                        break;
+                    }
+                }
+            }
+            return ret_val;
         } catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
-    
+    getCheckElem () {
+        return class extends mofron.Component {
+            initDomConts (prm) {
+                try {
+                    this.name('Checkbox_element');
+                    
+                    this.vdom().addChild(
+                        new mofron.Dom({
+                            tag       : 'input',
+                            component :  prm,
+                            attr      : {'type'  : 'checkbox'},
+                            style     : {'float' : 'left'}
+                        })
+                    );
+                } catch (e) {
+                    console.error(e.stack);
+                    throw e;
+                }
+            }
+            
+            index (idx) {
+                try {
+                    if (undefined === idx) {
+                        /* getter */
+                        return (undefined === this.m_index) ? null : this.m_index;
+                    }
+                    /* setter */
+                    if ('number' !== typeof idx) {
+                        throw new Error('invalid parameter');
+                    }
+                    this.m_index = idx;
+                } catch (e) {
+                    console.error(e.stack);
+                    throw e;
+                }
+            }
+            
+            check (flg) {
+                try {
+                    if (undefined === flg) {
+                        /* getter */
+                        var ret_chk = this.vdom().child()[0].prop('checked');
+                        return (null === ret_chk) ? false : ret_chk;
+                    }
+                    /* setter */
+                    if ('boolean' === typeof flg) {
+                        throw new Error('invalid parameter');
+                    }
+                    this.vdom().child()[0].prop('checked', flg);
+                } catch (e) {
+                    console.error(e.stack);
+                    throw e;
+                }
+            }
+        }
+    }
 }
 mofron.comp.checkbox = {};
 module.exports = mofron.comp.Checkbox;
-
-
-mofron.comp.Checkbox_element = class extends mofron.Component {
-    initDomConts (prm) {
-        try {
-            this.name('Checkbox_element');
-            
-            this.vdom().addChild(
-                new mofron.Dom({
-                    tag       : 'input',
-                    component :  prm,
-                    attr      : {'type'  : 'checkbox'},
-                    style     : {'float' : 'left'}
-                })
-            );
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    index (idx) {
-        try {
-            if (undefined === idx) {
-                /* getter */
-                return (undefined === this.m_index) ? null : this.m_index;
-            }
-            /* setter */
-            if ('number' !== typeof idx) {
-                throw new Error('invalid parameter');
-            }
-            this.m_index = idx;
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-    
-    check (flg) {
-        try {
-            if (undefined === flg) {
-                /* getter */
-                var ret_chk = this.vdom().child()[0].prop('checked');
-                return (null === ret_chk) ? false : ret_chk;
-            }
-            /* setter */
-            if ('boolean' === typeof flg) {
-                throw new Error('invalid parameter');
-            }
-            this.vdom().child()[0].prop('checked', flg);
-        } catch (e) {
-            console.error(e.stack);
-            throw e;
-        }
-    }
-}
