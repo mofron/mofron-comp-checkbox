@@ -24,43 +24,42 @@ mofron.comp.Checkbox = class extends mofron.comp.Form {
                           addChild : new mofron.Param(chd, disp)
                       });
            
-           /* set checked event */
+           /* set change event */
+           var chg_evt = function(chg_prm) {
+                             try {
+                                 var chg_evt = chg_prm[0].changeEvent();
+                                 if (null !== chg_evt) {
+                                     chg_evt(
+                                         chg_prm[1].index(),
+                                         chg_prm[0].check(chg_prm[1].index())
+                                     );
+                                 }
+                             } catch (e) {
+                                 console.error(e.stack);
+                                 throw e;
+                             }
+                         };
            elem.addEvent(
                new mofron.event.Common({
-                   handler : new mofron.Param(
-                                 function(obj) {
-                                     try {
-                                         var chg_evt = obj[0].changeEvent();
-                                         if (null !== chg_evt) {
-                                             chg_evt(
-                                                 obj[1].index(),
-                                                 obj[0].check(obj[1].index())
-                                             );
-                                         }
-                                     } catch (e) {
-                                         console.error(e.stack);
-                                         throw e;
-                                     }
-                                 },
-                                 [this,elem]
-                             ),
+                   handler : new mofron.Param(chg_evt,[this,elem]),
                    eventName : 'onchange'
                })
            );
            
            /* set contents click event */
-           chd.addEvent(
-               new mofron.event.Click(
-                   function () {
-                       try {
-                           alert("click");
-                       } catch (e) {
-                           console.error(e.stack);
-                           throw e;
-                       }
-                   }
-               )
-           );
+           //var clk_evt = function (clk_prm) {
+           //                  try {
+           //                      var idx = clk_prm[1].index();
+           //                      var val = clk_prm[0].check(idx);
+           //                      clk_prm[0].check(idx, !(val));
+           //                  } catch (e) {
+           //                      console.error(e.stack);
+           //                      throw e;
+           //                  }
+           //              };
+           //chd.addEvent(
+           //    new mofron.event.Click(clk_evt, [this, elem])
+           //);
            
            super.addChild(elem, disp);
         } catch (e) {
@@ -225,7 +224,7 @@ mofron.comp.Checkbox = class extends mofron.comp.Form {
                         return (null === ret_chk) ? false : ret_chk;
                     }
                     /* setter */
-                    if ('boolean' === typeof flg) {
+                    if ('boolean' !== typeof flg) {
                         throw new Error('invalid parameter');
                     }
                     this.vdom().child()[0].prop('checked', flg);
