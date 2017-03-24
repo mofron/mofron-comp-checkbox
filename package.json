@@ -1,6 +1,6 @@
 {
   "name": "mofron-comp-checkbox",
-  "version": "0.0.4",
+  "version": "0.1.0",
   "description": "checkbox component for mofron",
   "main": "index.js",
   "scripts": {
@@ -20,7 +20,8 @@
   },
   "homepage": "https://github.com/simpart/mofron-comp-checkbox#readme",
   "dependencies" : {
-      "mofron-event-common" : ""
+      "mofron-event-common"   : "",
+      "mofron-layout-horizon" : 
   },
   "devDependencies": {
   }

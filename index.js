@@ -16,7 +16,11 @@ mofron.comp.Checkbox = class extends mofron.comp.Form {
     
     addChild (chd, disp) {
         try {
+           if (false === mofron.func.isInclude(chd, 'Text')) {
+               throw new Error('invalid parameter');
+           }
            chd.style({'float' : 'none'});
+           
            var Elem = this.getCheckElem();
            var elem = new Elem({
                           param    : this,
@@ -90,7 +94,7 @@ mofron.comp.Checkbox = class extends mofron.comp.Form {
                     for (var idx in prm) {
                         if ('string' === typeof prm[idx]) {
                             this.addChild(new mofron.comp.Text(prm[idx]));
-                        } else if (true === mofron.func.isInclude(prm[idx])) {
+                        } else if (true === mofron.func.isInclude(prm[idx], 'Text')) {
                             this.addChild(prm[idx]);
                         } else {
                             throw new Error('invalid parameter');
@@ -228,6 +232,37 @@ mofron.comp.Checkbox = class extends mofron.comp.Form {
                         throw new Error('invalid parameter');
                     }
                     this.vdom().child()[0].prop('checked', flg);
+                } catch (e) {
+                    console.error(e.stack);
+                    throw e;
+                }
+            }
+            
+            addChild (chd, disp) {
+                try {
+                    super.addChild(chd, disp);
+                    
+                    var txt_size = chd.size();
+                    if (null === txt_size) {
+                        txt_size = 15;
+                        chd.size(txt_size);
+                    }
+                    
+                    this.topPosition(txt_size);
+                } catch (e) {
+                    console.error(e.stack);
+                    throw e;
+                }
+            }
+            
+            topPosition (txt_sz) {
+                try {
+                    var top_val = (txt_sz / 2) - 6;
+                    top_val = (3 > top_val) ? top_val : top_val+3;
+                    this.style({
+                        'position' : 'relative',
+                        'top'      : (0 >= top_val) ? '0px' : top_val + 'px'
+                    });
                 } catch (e) {
                     console.error(e.stack);
                     throw e;
