@@ -1,6 +1,6 @@
 {
   "name": "mofron-comp-checkbox",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "checkbox component for mofron",
   "main": "index.js",
   "scripts": {
@@ -11,18 +11,17 @@
     "url": "git+https://github.com/simpart/mofron-comp-checkbox.git"
   },
   "keywords": [
-    "mofron"
+    "front-end"
   ],
   "author": "simparts",
-  "license": "SEE LICENSE IN LICENSE",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/simpart/mofron-comp-checkbox/issues"
   },
   "homepage": "https://github.com/simpart/mofron-comp-checkbox#readme",
   "dependencies" : {
-      "mofron-event-common"   : "",
-      "mofron-layout-horizon" : 
+      "mofron-comp-formitem" : "",
+      "mofron-event-oncommon" : "",
+      "mofron-event-click" : ""
   },
-  "devDependencies": {
-  }
 }
