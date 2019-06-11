@@ -1,6 +1,6 @@
 {
   "name": "mofron-comp-checkbox",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "checkbox component for mofron",
   "main": "index.js",
   "scripts": {
@@ -23,5 +23,5 @@
       "mofron-comp-formitem" : "",
       "mofron-event-oncommon" : "",
       "mofron-event-click" : ""
-  },
+  }
 }
