@@ -16,14 +16,13 @@ npm install mofron mofron-comp-checkbox
 ```html
 <require>
     <tag module="mofron-comp-checkbox">CheckBox</tag>
-    <tag module="mofron-comp-text">Text</tag>
 </require>
 
 <script run=init>
 let chg_evt = (p1,p2,p3) => { console.log(p2); }
 </script>
 
-<CheckBox name=chkbx changeEvent=chg_evt size="0.2rem">
+<CheckBox changeEvent=chg_evt size="0.2rem">
     <text>Check Box</text>
 </CheckBox>
 ```
