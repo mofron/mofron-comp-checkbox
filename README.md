@@ -24,9 +24,7 @@ let chg_evt = (p1,p2,p3) => { console.log(p2); }
 </script>
 
 <CheckBox name=chkbx changeEvent=chg_evt size="0.2rem">
-    <text>
-        <Text weight=900>Check Box</Text>
-    </text>
+    <text>Check Box</text>
 </CheckBox>
 ```
 # Parameter
