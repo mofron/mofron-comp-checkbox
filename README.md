@@ -22,7 +22,7 @@ npm install mofron mofron-comp-checkbox
 let chg_evt = (p1,p2,p3) => { console.log(p2); }
 </script>
 
-<CheckBox changeEvent=chg_evt>Check Box</CheckBox>
+<CheckBox changeEvent=chg_evt>Check</CheckBox>
 ```
 # Parameter
 
