@@ -15,7 +15,7 @@ mf.comp.CheckBox = class extends FormItem {
     /**
      * constructor
      * 
-     * @param (string) 'text' function parameter
+     * @param 'text' parameter
      * @type private
      */
     constructor (po) {
@@ -31,16 +31,16 @@ mf.comp.CheckBox = class extends FormItem {
     }
     
     /**
-     * initialize DOM contents
+     * initialize dom contents
      * 
-     * @param vd : (string) check text
+     * @type private
      */
-    initDomConts (prm) {
+    initDomConts () {
         try {
             super.initDomConts();
             this.horizon(true);
             
-            /* init input contents */
+            /* set dom contents */
             let chk = new mf.Dom({
                           tag: "input", component: this,
                           attr : { type : "checkbox" }
@@ -53,7 +53,9 @@ mf.comp.CheckBox = class extends FormItem {
                 })
             );
             this.target(chk);
+            this.child(this.text());
             
+            /* init change event */
             let chg_evt = (p1,p2,p3) => {
                 try {
                     let cbx_evt = p1.changeEvent();
@@ -66,7 +68,7 @@ mf.comp.CheckBox = class extends FormItem {
                 }
             }
             this.event(new evCommon(chg_evt, "onchange"));
-            this.child(this.text());
+            
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -74,9 +76,9 @@ mf.comp.CheckBox = class extends FormItem {
     }
     
     /**
-     * item value
+     * check status
      *
-     * @param (boolean) the same as 'check' parameter
+     * @param (boolean) same as 'check'
      * @return (boolean) check status
      * @type tag parameter
      */
@@ -88,7 +90,7 @@ mf.comp.CheckBox = class extends FormItem {
     }
     
     /**
-     * item value
+     * check status
      *
      * @param (boolean) true: check
      *                  false: uncheck
@@ -125,6 +127,7 @@ mf.comp.CheckBox = class extends FormItem {
      *
      * @param (string/mofron-comp-text) check text contents
      * @return (mofron-comp-text) check text contents
+     * @type tag parameter
      */
     text (prm) {
         try {
@@ -147,9 +150,9 @@ mf.comp.CheckBox = class extends FormItem {
     }
     
     /**
-     * clear item value
+     * clear check
      *
-     * @type private
+     * @type function
      */
     clear () {
         try { this.check(false); } catch (e) {
