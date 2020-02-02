@@ -2,28 +2,32 @@
  * @file mofron-comp-checkbox/index.js
  * @brief checkbox component for mofron
  * @feature Checkbox text size is automatically changed when the height is changed.
- * @author simpart
+ * @license MIT
  */
-const mf       = require("mofron");
 const FormItem = require("mofron-comp-formitem");
 const Text     = require("mofron-comp-text");
-const evCommon = require("mofron-event-oncommon");
+const onCommon = require("mofron-event-oncommon");
 const Click    = require("mofron-event-click");
+const comutl   = mofron.util.common;
 
-mf.comp.CheckBox = class extends FormItem {
-    
+module.exports = class extends FormItem {
     /**
-     * constructor
+     * initialize conponent
      * 
-     * @param 'text' parameter
+     * @param short-form parameter
+     *        key-value: component config
+     * @short text
      * @type private
      */
-    constructor (po) {
+    constructor (prm) {
         try {
             super();
             this.name("CheckBox");
-            this.prmMap("text");
-            this.prmOpt(po);
+            this.shortForm("text");
+            
+	    if (undefined !== prm) {
+                this.config(prm);
+	    }
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -40,35 +44,35 @@ mf.comp.CheckBox = class extends FormItem {
             super.initDomConts();
             this.horizon(true);
             
-            /* set dom contents */
-            let chk = new mf.Dom({
+	    let chk = new mofron.class.Dom({
                           tag: "input", component: this,
-                          attr : { type : "checkbox" }
+                          attrs : { type : "checkbox" }
                       });
-            
-            this.target().addChild(
-                new mf.Dom({
-                    tag: "div", component: this,
-                    style: { "display" : "flex" }, addChild: chk
-                })
+            this.child(
+	        new mofron.class.Component({
+                    style: { "display" : "flex" },
+		    childDom: new mofron.class.PullConf({ child: chk }),
+		    child: this.text()
+	        })
             );
-            this.target(chk);
-            this.child(this.text());
+            this.childDom(chk);
             
-            /* init change event */
-            let chg_evt = (p1,p2,p3) => {
+	    /* set change event */
+	    let chkbx = this;
+	    let onchg = () => {
                 try {
-                    let cbx_evt = p1.changeEvent();
-                    for (let cb_idx in cbx_evt) {
-                        cbx_evt[cb_idx][0](p1, p1.check(), cbx_evt[cb_idx][1]);
-                    }
-                } catch (e) {
+		    let chg_evt = chkbx.changeEvent();
+		    for (let cidx in chg_evt) {
+                        chg_evt[cidx].exec(chkbx,chkbx.check());
+		    }
+		} catch (e) {
                     console.error(e.stack);
-                    throw e;
-                }
-            }
-            this.event(new evCommon(chg_evt, "onchange"));
-            
+		    throw e;
+		}
+	    }
+            this.event(new onCommon(
+	        comutl.getarg(onchg,"onchange")
+	    ));
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -76,46 +80,47 @@ mf.comp.CheckBox = class extends FormItem {
     }
     
     /**
-     * check status
+     * check status setter/getter
      *
      * @param (boolean) same as 'check'
      * @return (boolean) check status
-     * @type tag parameter
+     * @type parameter
      */
     value (prm) {
-        try { return this.check(prm); } catch (e) {
+        try {
+	    return this.check(prm);
+	} catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
     /**
-     * check status
+     * check status setter/getter
      *
      * @param (boolean) true: check
      *                  false: uncheck
+     *                  undefined: call as getter
      * @return (boolean) check status
-     * @type tag parameter
+     * @type parameter
      */
     check (flg) {
         try {
-            if (undefined === flg) {
-                /* getter */
-                let ret = this.target().prop("checked");
-                return (null === ret) ? false : ret;
-            }
+            let sts = this.childDom().props("checked");
+	    if (undefined === flg) {
+                return sts;
+	    }
             /* setter */
-            if ("boolean" !== typeof flg) {
+	    if ("boolean" !== typeof flg) {
                 throw new Error("invalid parameter");
             }
-            let chk_buf = this.check();
-            this.target().prop("checked", flg);
-            if (chk_buf !== flg) {
+	    this.childDom().props({ checked : flg });
+            if (flg !== sts) {
                 let chg_evt = this.changeEvent();
-                for (let cidx in chg_evt) {
-                    chg_evt[cidx][0](this, flg, chg_evt[cidx][1]);
-                }
-            }
+		for (let cidx in chg_evt) {
+                    chg_evt[cidx].exec(this, flg);
+		}
+	    }
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -123,23 +128,25 @@ mf.comp.CheckBox = class extends FormItem {
     }
     
     /**
-     * check text
+     * check text setter/getter
      *
-     * @param (string/mofron-comp-text) check text contents
+     * @param (mixed) string: check text string
+     *                mofron-comp-text: check text component
+     *                undefined: call as getter
      * @return (mofron-comp-text) check text contents
-     * @type tag parameter
+     * @type parameter
      */
     text (prm) {
         try {
-            if (true === mf.func.isInclude(prm, "Text")) {
+            if (true === comutl.isinc(prm, "Text")) {
                 prm.event(
-                    new Click([
+                    new Click(comutl.getarg(
                         (cp1,cp2,cp3) => { cp3.check(!cp3.check()) },
                         this
-                    ])
+                    ))
                 );
             } else if ('string' === typeof prm) {
-                this.text().option({ text: prm });
+                this.text().text(prm);
                 return;
             }
             return this.innerComp('text', prm, Text);
@@ -155,7 +162,9 @@ mf.comp.CheckBox = class extends FormItem {
      * @type function
      */
     clear () {
-        try { this.check(false); } catch (e) {
+        try {
+	    this.check(false);
+	} catch (e) {
             console.error(e.stack);
             throw e;
         }
@@ -165,27 +174,35 @@ mf.comp.CheckBox = class extends FormItem {
      * check box size
      *
      * @param (string (size)) check box size (both height and width)
-     * @return (string (size)) check box size
-     * @type tag parameter
+     *                        undefined: call as getter
+     * @return (mixed) string(size): check box size
+     *                 null: not set
+     * @type parameter
      */
     size (prm) {
-        try { super.size(prm, prm); } catch (e) {
+        try {
+	    let ret = super.size(prm, prm);
+	    return (undefined === ret) ? ret : ret[0]
+	} catch (e) {
             console.error(e.stack);
             throw e;
         }
     }
     
     /**
-     * check box height
+     * check box height setter/getter
      *
      * @param (string (size)) check box height
-     * @type tag parameter
+     *                        undefined: call as getter
+     * @return (mixed) string(size): check box height
+     *                 null: not set
+     * @type parameter
      */
     height (prm) {
         try {
             let ret = super.height(prm);
             if (undefined !== prm) {
-                this.text().size(prm);
+                this.text().height(prm);
             }
             return ret;
         } catch (e) {
@@ -194,5 +211,4 @@ mf.comp.CheckBox = class extends FormItem {
         }
     }
 }
-module.exports = mf.comp.CheckBox;
 /* end of file */

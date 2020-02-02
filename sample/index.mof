@@ -1,0 +1,9 @@
+<require>
+    <tag load="mofron-comp-checkbox">CheckBox</tag>
+</require>
+
+<script run=init>
+let chg_evt = (p1,p2,p3) => { console.log(p2); }
+</script>
+
+<CheckBox change-event=@chg_evt>Check</CheckBox>
