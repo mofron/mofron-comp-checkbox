@@ -1,7 +1,7 @@
 /**
  * @file mofron-comp-checkbox/index.js
  * @brief checkbox component for mofron
- * @feature Checkbox text size is automatically changed when the height is changed.
+ * @feature checkbox text size is automatically changed when the height is changed.
  * @license MIT
  */
 const FormItem = require("mofron-comp-formitem");
@@ -14,8 +14,8 @@ module.exports = class extends FormItem {
     /**
      * initialize conponent
      * 
-     * @param short-form parameter
-     *        key-value: component config
+     * @param (mixed) short-form parameter
+     *                key-value: component config
      * @short text
      * @type private
      */
