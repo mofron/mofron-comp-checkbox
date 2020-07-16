@@ -1,6 +1,6 @@
 {
   "name": "mofron-comp-checkbox",
-  "version": "0.3.1",
+  "version": "0.3.3",
   "description": "checkbox component for mofron",
   "main": "index.js",
   "scripts": {

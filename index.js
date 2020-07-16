@@ -9,6 +9,7 @@ const Text     = require("mofron-comp-text");
 const onCommon = require("mofron-event-oncommon");
 const Click    = require("mofron-event-click");
 const comutl   = mofron.util.common;
+const ConfArg  = mofron.class.ConfArg;
 
 module.exports = class extends FormItem {
     /**
@@ -70,9 +71,7 @@ module.exports = class extends FormItem {
 		    throw e;
 		}
 	    }
-            this.event(new onCommon(
-	        comutl.getarg(onchg,"onchange")
-	    ));
+            this.event(new onCommon(onchg,"onchange"));
         } catch (e) {
             console.error(e.stack);
             throw e;
@@ -140,10 +139,12 @@ module.exports = class extends FormItem {
         try {
             if (true === comutl.isinc(prm, "Text")) {
                 prm.event(
-                    new Click(comutl.getarg(
-                        (cp1,cp2,cp3) => { cp3.check(!cp3.check()) },
-                        this
-                    ))
+                    new Click(
+		        new ConfArg(
+		            (cp1,cp2,cp3) => { cp3.check(!cp3.check()) },
+                            this
+                        )
+                    )
                 );
             } else if ('string' === typeof prm) {
                 this.text().text(prm);
