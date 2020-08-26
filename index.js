@@ -23,7 +23,7 @@ module.exports = class extends FormItem {
     constructor (prm) {
         try {
             super();
-            this.name("CheckBox");
+            this.modname("CheckBox");
             this.shortForm("text");
             
 	    if (undefined !== prm) {

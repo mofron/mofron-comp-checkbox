@@ -13,9 +13,9 @@ npm install mofron mofron-comp-checkbox
 
 # Sample
 ```html
-<require>
+<setting>
     <tag load="mofron-comp-checkbox">CheckBox</tag>
-</require>
+</setting>
 
 <script run=init>
 let chg_evt = (p1,p2,p3) => { console.log(p2); }
@@ -35,7 +35,7 @@ let chg_evt = (p1,p2,p3) => { console.log(p2); }
 | ◯  | text | mixed | string: check text string |
 | | | | mofron-comp-text: check text component |
 | | | | undefined: call as getter |
-| | clear | | | size | string (size) | check box size (both height and width) |
+| | clear | ||| | size | string (size) | check box size (both height and width) |
 | | | | undefined: call as getter |
 | | height | string (size) | check box height |
 | | | | undefined: call as getter |
