@@ -64,7 +64,7 @@ module.exports = class extends FormItem {
                 try {
 		    let chg_evt = chkbx.changeEvent();
 		    for (let cidx in chg_evt) {
-                        chg_evt[cidx].exec(chkbx,chkbx.check());
+		        chg_evt[cidx][0](chkbx,chkbx.check(),chg_evt[cidx][1]);
 		    }
 		} catch (e) {
                     console.error(e.stack);
