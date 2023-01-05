@@ -64,7 +64,7 @@ module.exports = class extends FormItem {
                 try {
 		    let chg_evt = chkbx.changeEvent();
 		    for (let cidx in chg_evt) {
-		        chg_evt[cidx][0](chkbx,chkbx.check(),chg_evt[cidx][1]);
+		        chg_evt[cidx][0](chkbx,chkbx.checked(),chg_evt[cidx][1]);
 		    }
 		} catch (e) {
                     console.error(e.stack);
@@ -103,7 +103,7 @@ module.exports = class extends FormItem {
      * @return (boolean) check status
      * @type parameter
      */
-    check (flg) {
+    checked (flg) {
         try {
             let sts = this.childDom().props("checked");
 	    if (undefined === flg) {
@@ -141,7 +141,7 @@ module.exports = class extends FormItem {
                 prm.event(
                     new Click(
 		        new ConfArg(
-		            (cp1,cp2,cp3) => { cp3.check(!cp3.check()) },
+		            (cp1,cp2,cp3) => { cp3.checked(!cp3.checked()) },
                             this
                         )
                     )
@@ -164,7 +164,7 @@ module.exports = class extends FormItem {
      */
     clear () {
         try {
-	    this.check(false);
+	    this.checked(false);
 	} catch (e) {
             console.error(e.stack);
             throw e;
